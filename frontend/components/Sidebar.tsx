@@ -2,6 +2,8 @@
 
 import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
 import { useContext, createContext, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 const SidebarContext = createContext({ expanded: false });
 
@@ -49,7 +51,7 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
 }
 
 interface SidebarItemProps {
-  icon: React.ReactNode;
+  icon: IconProp;
   text: string;
   active?: boolean;
   alert?: boolean;
@@ -61,17 +63,17 @@ export function SidebarItem({ icon, text, active, alert }: SidebarItemProps) {
   return (
     <li
       className={`
-        relative flex items-center py-2 px-3 my-1
-        font-medium rounded-md cursor-pointer
-        transition-colors group
-        ${
-          active
-            ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
-            : "hover:bg-indigo-50 text-gray-600"
-        }
-    `}
+          relative flex items-center py-2 px-3 my-1
+          font-medium rounded-md cursor-pointer
+          transition-colors group
+          ${
+            active
+              ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
+              : "hover:bg-indigo-50 text-gray-600"
+          }
+      `}
     >
-      {icon}
+      <FontAwesomeIcon icon={icon} className="transition-all duration-300" />
       <span
         className={`overflow-hidden transition-all duration-300 ${
           expanded ? "w-52 ml-3 opacity-100" : "w-0 opacity-0"
@@ -90,11 +92,11 @@ export function SidebarItem({ icon, text, active, alert }: SidebarItemProps) {
       {!expanded && (
         <div
           className={`
-          absolute left-full rounded-md px-2 py-1 ml-12
-          bg-indigo-100 text-indigo-800 text-sm
-          invisible opacity-20 -translate-x-3 transition-all duration-300
-          group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-      `}
+            absolute left-full rounded-md px-2 py-1 ml-12
+            bg-indigo-100 text-indigo-800 text-sm
+            invisible opacity-20 -translate-x-3 transition-all duration-300
+            group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+        `}
         >
           {text}
         </div>
