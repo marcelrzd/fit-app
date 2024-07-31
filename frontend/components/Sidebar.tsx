@@ -13,20 +13,13 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
       <nav className="h-full flex flex-col bg-white border-r shadow-sm transition-all duration-300">
         <div className="px-4 pb-2 flex justify-between items-center">
           <span
-            className={` transition-all duration-300 ${
+            className={`transition-all duration-300 ${
               expanded ? "text-red-500" : "text-blue-500"
             }`}
           >
             {expanded ? "Fit App" : "FA"}
           </span>
 
-          {/* <img
-            src="https://img.logoipsum.com/243.svg"
-            className={`overflow-hidden transition-all ${
-              expanded ? "w-32 opacity-90" : "w-0" // todo: show initials when hidden
-            }`}
-            alt=""
-          /> */}
           <button
             onClick={() => setExpanded((curr) => !curr)}
             className="rounded-lg bg-gray-50 hover:bg-gray-100"
@@ -42,41 +35,21 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
             }`}
           >
             <ul
-              className={`rounded-lg transition-all duration-300 ${
-                expanded ? "opacity-90" : "w-[40px]"
+              className={`transition-all duration-300 ${
+                expanded ? "opacity-90" : "w-10"
               }`}
             >
               {children}
             </ul>
           </div>
         </SidebarContext.Provider>
-
-        {/* <div className="flex p-3  rounded-lg">
-          <img
-            src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
-            alt=""
-            className="w-10 h-10 rounded-md"
-          />
-          <div
-            className={`
-              flex justify-between items-center
-              overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
-          `}
-          >
-            <div className="leading-4">
-              <h4 className="font-semibold">John Doe</h4>
-              <span classNande"text-xs text-gray-600">johndoe@gmail.com</span>
-            </div>
-            <MoreVertical size={20} />
-          </div>
-        </div> */}
       </nav>
     </aside>
   );
 }
 
 interface SidebarItemProps {
-  icon: string;
+  icon: React.ReactNode;
   text: string;
   active?: boolean;
   alert?: boolean;
@@ -101,7 +74,7 @@ export function SidebarItem({ icon, text, active, alert }: SidebarItemProps) {
       {icon}
       <span
         className={`overflow-hidden transition-all duration-300 ${
-          expanded ? "w-52 ml-3" : "w-0"
+          expanded ? "w-52 ml-3 opacity-100" : "w-0 opacity-0"
         }`}
       >
         {text}
