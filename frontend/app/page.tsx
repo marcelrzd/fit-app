@@ -1,7 +1,15 @@
-import Image from "next/image";
+import WeatherCard from "@/components/ui/WeatherCard";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24"></main>
+    <div className="h-full w-full ">
+      <div>
+        <h1 className="text-4xl text-center">Good Evening Marcel!</h1>
+      </div>
+      <div className="container flex flex-row flex-wrap items-center justify-center w-full">
+        <WeatherCard />
+        <WeatherCard />
+      </div>
+    </div>
   );
 }

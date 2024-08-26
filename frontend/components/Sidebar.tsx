@@ -11,8 +11,8 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <aside className="h-screen transition-all duration-300">
-      <nav className="h-full flex flex-col bg-white border-r shadow-sm transition-all duration-300">
+    <aside className="h-screen transition-all duration-300 max-w-[200px]">
+      <nav className="h-full p-4 flex flex-col bg-white border-r shadow-sm transition-all duration-300">
         <div className="px-4 pb-2 flex justify-between items-center">
           <span
             className={`transition-all duration-300 ${
@@ -65,7 +65,7 @@ export function SidebarItem({ icon, text, active, alert }: SidebarItemProps) {
       className={`
           relative flex items-center py-2 px-3 my-1
           font-medium rounded-md cursor-pointer
-          transition-colors group
+          transition-colors group max-w-[150px]
           ${
             active
               ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-indigo-800"
