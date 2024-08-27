@@ -15,6 +15,8 @@ import RainIcon from "@/img/266.webp";
 import Nightbg from "@/img/night-bg.jpg";
 import Daybg from "@/img/day-bg.jpg";
 
+import { formatDateTime, formatIconUrl } from "@/utils/utils";
+
 export default function WeatherCard() {
   const [weather, setWeather] = useState({
     current: { last_updated: "" },
@@ -40,27 +42,6 @@ export default function WeatherCard() {
     },
   });
   const [status, setStatus] = useState(0);
-
-  const formatTime = (time: string) => {
-    return new Date(time).toLocaleTimeString("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const formatDateTime = (time: string) => {
-    return new Date(time).toLocaleString("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  };
-
-  const formatIconUrl = (icon: string) => {
-    return icon.replace("//", "https://");
-  };
 
   const getBackgroundStyle = () => {
     const currentHour = new Date().getHours();
