@@ -8,7 +8,6 @@ export default function Home() {
       </div>
       <div className="container flex flex-row flex-wrap items-center justify-center w-full">
         <WeatherCard />
-        <WeatherCard />
       </div>
     </div>
   );
