@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import data from "@/app/data/taco.json";
 import { FoodItem } from "@/app/nutritional_info/types";
 
@@ -18,21 +18,22 @@ import { Input } from "./ui/input";
 
 export function MacrosTable() {
   const [foodSearch, setFoodSearch] = useState("");
-  const [foodData, setFoodData] = useState<FoodItem[]>([]);
+  const [qty, setQty] = useState("100");
+  const [foodData, setFoodData] = useState("");
   const [macros, setMacros] = useState<FoodItem[]>([]);
-  const {
-    description = "",
-    energy_kcal,
-    carbohydrate_g,
-    protein_g,
-    total_fat,
-    fiber_g,
-    sodium_mg,
-  } = foodData || {};
+  const [selectedFood, setSelectedFood] = useState<number | null>(null);
+
+  // handle food search start
+  const parseFatValue = (value: number | string): number => {
+    const num = parseFloat(value as string);
+    return isNaN(num) ? 0 : num;
+  };
 
   useEffect(() => {
     if (foodSearch.trim() === "") {
       setMacros([]);
+      setFoodData("");
+      setSelectedFood(null);
       return;
     }
 
@@ -41,17 +42,12 @@ export function MacrosTable() {
         item.description.toLowerCase().includes(foodSearch.toLowerCase())
       )
       .map((item) => {
-        // Parse fat values
-        const saturated = parseFloat(item.saturated_g as string) || 0;
-        const monounsaturated =
-          parseFloat(item.monounsaturated_g as string) || 0;
-        const polyunsaturated =
-          parseFloat(item.polyunsaturated_g as string) || 0;
+        const saturated = parseFatValue(item.saturated_g);
+        const monounsaturated = parseFatValue(item.monounsaturated_g);
+        const polyunsaturated = parseFatValue(item.polyunsaturated_g);
 
-        // Calculate total_fat
         const total_fat = saturated + monounsaturated + polyunsaturated;
 
-        // Return the mapped object
         return {
           id: item.id,
           description: item.description,
@@ -59,12 +55,9 @@ export function MacrosTable() {
           energy_kcal: item.energy_kcal,
           carbohydrate_g: item.carbohydrate_g,
           protein_g: item.protein_g,
-          saturated_g: item.saturated_g,
-          monounsaturated_g: item.monounsaturated_g,
-          polyunsaturated_g: item.polyunsaturated_g,
           total_fat: total_fat,
           sodium_mg: item.sodium_mg,
-          fiber_g: item.fiber_g
+          fiber_g: item.fiber_g,
         } as FoodItem;
       });
 
@@ -77,7 +70,39 @@ export function MacrosTable() {
 
   const handleFoodSelect = (food: FoodItem) => {
     setFoodData(food);
+    setSelectedFood(food.id);
+    setQty("100");
   };
+  // handle food search end
+
+  // handle qty change start
+  const calculatedData = useMemo(() => {
+    if (foodData && qty) {
+      const qtyValue = parseFloat(qty);
+      if (isNaN(qtyValue) || qtyValue <= 0) {
+        return null;
+      }
+      const factor = qtyValue / 100;
+
+      // Calculate total_fat using parsed fat values
+      const saturated = parseFatValue(foodData.saturated_g);
+      const monounsaturated = parseFatValue(foodData.monounsaturated_g);
+      const polyunsaturated = parseFatValue(foodData.polyunsaturated_g);
+      const total_fat = saturated + monounsaturated + polyunsaturated;
+
+      return {
+        ...foodData,
+        energy_kcal: foodData.energy_kcal * factor,
+        carbohydrate_g: foodData.carbohydrate_g * factor,
+        protein_g: foodData.protein_g * factor,
+        total_fat: total_fat * factor,
+        sodium_mg: foodData.sodium_mg * factor,
+        fiber_g: foodData.fiber_g * factor,
+      };
+    }
+    return null;
+  }, [foodData, qty]);
+  // handle qty change end
 
   return (
     <div className="flex flex-row items-start w-full p-4 gap-6">
@@ -97,8 +122,12 @@ export function MacrosTable() {
               <span
                 key={item.id}
                 onClick={() => handleFoodSelect(item)}
-                className={`p-2 cursor-pointer hover:bg-slate-200 transition-all ease-in-out ${
-                  index % 2 === 0 ? "bg-slate-100" : ""
+                className={`p-2 cursor-pointer ${
+                  item.id === selectedFood
+                    ? "bg-blue-200 text-blue-800 font-semibold"
+                    : index % 2 === 0
+                    ? "bg-slate-100"
+                    : ""
                 }`}
               >
                 {item.description}
@@ -114,7 +143,22 @@ export function MacrosTable() {
           <TableHeader>
             <TableRow>
               <TableHead className="text-lg" colSpan={3}>
-                Macros of {foodData?.description || ""}
+                Macros of{" "}
+                <span className="font-bold">
+                  {foodData?.description
+                    ? `"${foodData.description}"`
+                    : `" - "`}
+                </span>{" "}
+                in 100g
+              </TableHead>
+              <TableHead className="text-lg text-right">
+                <Input
+                  type="number"
+                  className="w-[50%] bg-slate-100 float-right"
+                  placeholder="Qty in grams"
+                  value={qty}
+                  onChange={(e) => setQty(e.target.value)}
+                />
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -124,7 +168,7 @@ export function MacrosTable() {
                 Calories
               </TableCell>
               <TableCell className="text-right">
-                {formatValue(foodData.energy_kcal, " kcal")}
+                {formatValue(calculatedData?.energy_kcal, " kcal")}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -132,7 +176,7 @@ export function MacrosTable() {
                 Carbs
               </TableCell>
               <TableCell className="text-right">
-                {formatValue(foodData.carbohydrate_g, " g")}
+                {formatValue(calculatedData?.carbohydrate_g, " g")}
               </TableCell>
             </TableRow>
             <TableRow className="bg-slate-100">
@@ -140,7 +184,7 @@ export function MacrosTable() {
                 Protein
               </TableCell>
               <TableCell className="text-right">
-                {formatValue(foodData.protein_g, " g")}
+                {formatValue(calculatedData?.protein_g, " g")}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -148,21 +192,26 @@ export function MacrosTable() {
                 Total Fat
               </TableCell>
               <TableCell className="text-right">
-                {formatValue(foodData.total_fat, " g")}
+                {formatValue(calculatedData?.total_fat, " g")}
               </TableCell>
             </TableRow>
             <TableRow className="bg-slate-100">
               <TableCell className="font-medium" colSpan={3}>
                 Fibers
               </TableCell>
-              <TableCell className="text-right">{formatValue(foodData.fiber_g, " mg")}</TableCell>
+              <TableCell className="text-right">
+                {formatValue(calculatedData?.fiber_g, " mg")}
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="font-medium" colSpan={3}>
                 Sodium
               </TableCell>
               <TableCell className="text-right">
-                {formatValue(foodData.sodium_mg, " mg")}
+                {formatValue(
+                  calculatedData?.sodium_mg ? calculatedData?.sodium_mg : "-",
+                  " mg"
+                )}
               </TableCell>
             </TableRow>
           </TableBody>
