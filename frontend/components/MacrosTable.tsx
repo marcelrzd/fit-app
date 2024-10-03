@@ -65,7 +65,7 @@ export function MacrosTable() {
   }, [foodSearch]);
 
   const formatValue = (value: number, unit: string) => {
-    return typeof value === "number" ? `${value.toFixed(2)}${unit}` : "-";
+    return typeof value === "number" ? `${value.toFixed(1)}${unit}` : "-";
   };
 
   const handleFoodSelect = (food: FoodItem) => {
@@ -77,6 +77,7 @@ export function MacrosTable() {
 
   // handle qty change start
   const calculatedData = useMemo(() => {
+    console.log("foodData", foodData);
     if (foodData && qty) {
       const qtyValue = parseFloat(qty);
       if (isNaN(qtyValue) || qtyValue <= 0) {
@@ -84,18 +85,12 @@ export function MacrosTable() {
       }
       const factor = qtyValue / 100;
 
-      // Calculate total_fat using parsed fat values
-      const saturated = parseFatValue(foodData.saturated_g);
-      const monounsaturated = parseFatValue(foodData.monounsaturated_g);
-      const polyunsaturated = parseFatValue(foodData.polyunsaturated_g);
-      const total_fat = saturated + monounsaturated + polyunsaturated;
-
       return {
         ...foodData,
         energy_kcal: foodData.energy_kcal * factor,
         carbohydrate_g: foodData.carbohydrate_g * factor,
         protein_g: foodData.protein_g * factor,
-        total_fat: total_fat * factor,
+        total_fat: foodData.total_fat * factor,
         sodium_mg: foodData.sodium_mg * factor,
         fiber_g: foodData.fiber_g * factor,
       };
@@ -106,7 +101,7 @@ export function MacrosTable() {
 
   return (
     <div className="flex flex-row items-start w-full p-4 gap-6">
-      <div className="w-[35%]">
+      <div className="w-[30%]">
         <div className="text-left text-lg font-semibold mb-4 flex justify-between">
           <span className="p-2">Food</span>
           <Input
@@ -138,7 +133,7 @@ export function MacrosTable() {
           )}
         </div>
       </div>
-      <div className="w-[50%] rounded-md border">
+      <div className="w-[60%] rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
@@ -149,7 +144,7 @@ export function MacrosTable() {
                     ? `"${foodData.description}"`
                     : `" - "`}
                 </span>{" "}
-                in 100g
+                in {qty}g
               </TableHead>
               <TableHead className="text-lg text-right">
                 <Input
@@ -200,7 +195,7 @@ export function MacrosTable() {
                 Fibers
               </TableCell>
               <TableCell className="text-right">
-                {formatValue(calculatedData?.fiber_g, " mg")}
+                {formatValue(calculatedData?.fiber_g, " g")}
               </TableCell>
             </TableRow>
             <TableRow>
