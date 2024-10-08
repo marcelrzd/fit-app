@@ -37,7 +37,7 @@ export default function RootLayout({
               <SidebarItem
                 text="Body Measurements"
                 icon={faRulerVertical}
-                link="/"
+                link="/body_measurements"
               />
               <SidebarItem text="Training" icon={faDumbbell} link="/" />
             </Sidebar>
