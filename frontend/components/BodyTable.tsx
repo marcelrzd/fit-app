@@ -13,8 +13,24 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  MoreHorizontal,
+  PlusIcon,
+} from "lucide-react";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -248,7 +264,7 @@ export const columns: ColumnDef<Body>[] = [
   },
 ];
 
-export function DataTableDemo() {
+export function BodyTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -313,6 +329,112 @@ export function DataTableDemo() {
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+        <div>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="default" className="ml-2">
+                Add <PlusIcon className="ml-2 h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Add measurements</DialogTitle>
+                <DialogDescription>
+                  Add your body measurements to keep track of your progress.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="chest" className="text-right">
+                    Chest
+                  </Label>
+                  <Input
+                    id="chest"
+                    placeholder="In cm"
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="waist" className="text-right">
+                    Waist
+                  </Label>
+                  <Input
+                    id="waist"
+                    placeholder="In cm"
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="arm" className="text-right">
+                    Arm
+                  </Label>
+                  <Input id="arm" placeholder="In cm" className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="thigh" className="text-right">
+                    Thigh
+                  </Label>
+                  <Input
+                    id="thigh"
+                    placeholder="In cm"
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="calf" className="text-right">
+                    Calf
+                  </Label>
+                  <Input id="calf" placeholder="In cm" className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="hip" className="text-right">
+                    Hip
+                  </Label>
+                  <Input id="hip" placeholder="In cm" className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="shoulder" className="text-right">
+                    Shoulder
+                  </Label>
+                  <Input
+                    id="shoulder"
+                    placeholder="In cm"
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="fat" className="text-right">
+                    Fat
+                  </Label>
+                  <Input
+                    id="fat"
+                    placeholder="In percent (%)"
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="weight" className="text-right">
+                    Weight
+                  </Label>
+                  <Input
+                    id="weight"
+                    placeholder="In kg"
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="date" className="text-right">
+                    Date
+                  </Label>
+                  <Input id="date" placeholder="date" className="col-span-3" />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit">Save</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
