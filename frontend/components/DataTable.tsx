@@ -36,47 +36,69 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const data: Payment[] = [
+const data: Body[] = [
   {
     id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
+    weight: 84,
+    chest: 42,
+    waist: 34,
+    arm: 16,
+    thigh: 24,
+    fat: 25,
+    calf: 16,
+    hip: 40,
+    shoulder: 80,
+    date: "2021-01-01",
   },
   {
     id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
+    weight: 78,
+    chest: 40,
+    waist: 32,
+    arm: 15,
+    thigh: 22,
+    fat: 20,
+    calf: 15,
+    hip: 38,
+    shoulder: 78,
+    date: "2021-01-15",
   },
   {
     id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
+    weight: 75,
+    chest: 38,
+    waist: 30,
+    arm: 14,
+    thigh: 20,
+    fat: 15,
+    calf: 14,
+    hip: 36,
+    shoulder: 80,
+    date: "2021-02-01",
   },
 ];
 
-export type Payment = {
+export type Body = {
   id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
+  weight: number;
+  chest: number;
+  waist: number;
+  arm: number;
+  thigh: number;
+  fat: number;
+  calf: number;
+  hip: number;
+  shoulder: number;
+  date: string;
 };
 
-export const columns: ColumnDef<Payment>[] = [
+// format date
+function formatDate(date: string) {
+  let formatedDate = date.split("-");
+  return `${formatedDate[1]}/${formatedDate[2]}/${formatedDate[0]}`;
+}
+
+export const columns: ColumnDef<Body>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -100,47 +122,104 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "chest",
+    header: "Chest",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("chest")}cm</div>
     ),
   },
   {
-    accessorKey: "email",
+    accessorKey: "waist",
+    header: "Waist",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("waist")}cm</div>
+    ),
+  },
+  {
+    accessorKey: "arm",
+    header: "Arm",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("arm")}cm</div>
+    ),
+  },
+  {
+    accessorKey: "thigh",
+    header: "Thigh",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("thigh")}cm</div>
+    ),
+  },
+  {
+    accessorKey: "calf",
+    header: "Calf",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("calf")}cm</div>
+    ),
+  },
+  {
+    accessorKey: "hip",
+    header: "Hip",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("hip")}cm</div>
+    ),
+  },
+  {
+    accessorKey: "shoulder",
+    header: "Shoulder",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("shoulder")}cm</div>
+    ),
+  },
+  {
+    accessorKey: "fat",
+    header: "Fat",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("fat")}%</div>,
+  },
+  {
+    accessorKey: "weight",
+    header: "Weight",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("weight")}kg</div>
+    ),
+  },
+  {
+    accessorKey: "date",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Date
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{formatDate(row.getValue("date"))}</div>
+    ),
   },
-  {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
+  // {
+  //   accessorKey: "amount",
+  //   header: () => <div className="text-right">Amount</div>,
+  //   cell: ({ row }) => {
+  //     const amount = parseFloat(row.getValue("amount"));
 
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
+  //     // Format the amount as a dollar amount
+  //     const formatted = new Intl.NumberFormat("en-US", {
+  //       style: "currency",
+  //       currency: "USD",
+  //     }).format(amount);
 
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  },
+  //     return <div className="text-right font-medium">{formatted}</div>;
+  //   },
+  // },
   {
     id: "actions",
+    header: "Actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const data = row.original;
 
       return (
         <DropdownMenu>
@@ -151,15 +230,17 @@ export const columns: ColumnDef<Payment>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(data.id)}
             >
-              Copy payment ID
+              Delete
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(data.id)}
+            >
+              Update
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -199,7 +280,7 @@ export function DataTableDemo() {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
+          placeholder="Filter date..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("email")?.setFilterValue(event.target.value)

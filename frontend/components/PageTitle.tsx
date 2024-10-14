@@ -17,7 +17,7 @@ export default function PageTitle() {
 
   return (
     <>
-      <span className="capitalize text-xl font-bold">
+      <span className="uppercase text-2xl font-bold">
         {formatTitle(currentUrl)}
       </span>
     </>
