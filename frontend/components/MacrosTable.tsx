@@ -18,10 +18,12 @@ import { Input } from "./ui/input";
 
 export function MacrosTable() {
   const [foodSearch, setFoodSearch] = useState("");
-  const [qty, setQty] = useState("100");
-  const [foodData, setFoodData] = useState("");
+  const [qty, setQty] = useState<string>("100");
+  const [foodData, setFoodData] = useState<FoodItem | null>(null);
   const [macros, setMacros] = useState<FoodItem[]>([]);
-  const [selectedFood, setSelectedFood] = useState<number | null>(null);
+  const [selectedFood, setSelectedFood] = useState<number | null | undefined>(
+    null
+  );
 
   // handle food search start
   const parseFatValue = (value: number | string): number => {
@@ -32,7 +34,7 @@ export function MacrosTable() {
   useEffect(() => {
     if (foodSearch.trim() === "") {
       setMacros([]);
-      setFoodData("");
+      setFoodData(null);
       setSelectedFood(null);
       return;
     }
@@ -162,7 +164,7 @@ export function MacrosTable() {
                 Calories
               </TableCell>
               <TableCell className="text-right">
-                {formatValue(calculatedData?.energy_kcal, " kcal")}
+                {formatValue(calculatedData?.energy_kcal ?? 0, " kcal")}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -170,7 +172,7 @@ export function MacrosTable() {
                 Carbs
               </TableCell>
               <TableCell className="text-right">
-                {formatValue(calculatedData?.carbohydrate_g, " g")}
+                {formatValue(calculatedData?.carbohydrate_g ?? 0, " g")}
               </TableCell>
             </TableRow>
             <TableRow className="bg-slate-100">
@@ -178,7 +180,7 @@ export function MacrosTable() {
                 Protein
               </TableCell>
               <TableCell className="text-right">
-                {formatValue(calculatedData?.protein_g, " g")}
+                {formatValue(calculatedData?.protein_g ?? 0, " g")}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -186,7 +188,7 @@ export function MacrosTable() {
                 Total Fat
               </TableCell>
               <TableCell className="text-right">
-                {formatValue(calculatedData?.total_fat, " g")}
+                {formatValue(calculatedData?.total_fat ?? 0, " g")}
               </TableCell>
             </TableRow>
             <TableRow className="bg-slate-100">
@@ -194,7 +196,7 @@ export function MacrosTable() {
                 Fibers
               </TableCell>
               <TableCell className="text-right">
-                {formatValue(calculatedData?.fiber_g, " g")}
+                {formatValue(calculatedData?.fiber_g ?? 0, " g")}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -202,10 +204,7 @@ export function MacrosTable() {
                 Sodium
               </TableCell>
               <TableCell className="text-right">
-                {formatValue(
-                  calculatedData?.sodium_mg ? calculatedData?.sodium_mg : "-",
-                  " mg"
-                )}
+                {formatValue(calculatedData?.sodium_mg ?? 0, " mg")}
               </TableCell>
             </TableRow>
           </TableBody>
