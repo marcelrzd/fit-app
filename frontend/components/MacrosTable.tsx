@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import data from "@/app/data/taco.json";
+import data from "@/data/taco.json";
 import { FoodItem } from "@/app/nutritional_info/types";
 
 import {
@@ -77,7 +77,6 @@ export function MacrosTable() {
 
   // handle qty change start
   const calculatedData = useMemo(() => {
-    console.log("foodData", foodData);
     if (foodData && qty) {
       const qtyValue = parseFloat(qty);
       if (isNaN(qtyValue) || qtyValue <= 0) {

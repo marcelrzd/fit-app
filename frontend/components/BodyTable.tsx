@@ -51,6 +51,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 const data: Body[] = [
   {
@@ -426,11 +427,20 @@ export function BodyTable() {
                   <Label htmlFor="date" className="text-right">
                     Date
                   </Label>
-                  <Input id="date" placeholder="date" className="col-span-3" />
+                  <Input
+                    id="date"
+                    placeholder="mm/dd/YYYY"
+                    className="col-span-3"
+                  />
                 </div>
               </div>
               <DialogFooter>
-                <Button type="submit">Save</Button>
+                <DialogClose asChild>
+                  <Button variant={"outline"}>Close</Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <Button type="submit">Save</Button>
+                </DialogClose>
               </DialogFooter>
             </DialogContent>
           </Dialog>
